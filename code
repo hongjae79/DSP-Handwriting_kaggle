@@ -1,0 +1,52 @@
+import pandas as pd
+
+train = pd.read_csv("../Jason/train.csv")
+
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+
+
+images =train.iloc[0:5000,1:]
+labels = train.iloc[0:5000,:1]
+train_images, test_images,train_labels, test_labels = train_test_split(images, labels, train_size=0.8, random_state=0)
+
+i=1
+img=train_images.iloc[i].as_matrix()
+img=img.reshape((28, 28))
+plt.imshow(img,cmap='gray')
+plt.title(train_labels.iloc[i,0])
+plt.show()
+
+i=1
+img=test_images.iloc[i].as_matrix()
+img=img.reshape((28,28))
+plt.imshow(img,cmap='gray')
+plt.title(test_labels.iloc[i,0])
+plt.show()
+
+from sklearn import datasets
+from sklearn import svm
+
+x= train_images.as_matrix(columns=None)
+
+import numpy as np
+
+a= train_labels['label'].tolist()
+y = np.array(a)
+
+clf= svm.SVC(gamma = 0.0001, C= 100)
+clf.fit(x,y)
+
+u= test_images.as_matrix(columns = None)
+
+i=2
+img=test_images.iloc[i].as_matrix()
+img=img.reshape((28, 28))
+plt.imshow(img,cmap='gray')
+plt.title(test_labels.iloc[i,0])
+plt.show()
+
+print('Prediction is: ', clf.predict([u[i]]))
+
+# It shows Prediction is:  [1], which is wrong. 
