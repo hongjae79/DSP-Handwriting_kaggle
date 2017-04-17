@@ -1,0 +1,50 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn import svm
+from sklearn import preprocessing
+
+train = pd.read_csv("../Jason/train.csv")
+test = pd.read_csv("../Jason/test.csv")
+
+train_images =train.iloc[0:42000,1:]
+train_labels = train.iloc[0:42000,:1]
+test_images = test
+
+x= train_images.as_matrix(columns=None).astype(np.float)
+
+a= train_labels['label'].tolist()
+y = np.array(a)
+
+u= test_images.as_matrix(columns = None).astype(np.float)
+
+x_scaled = preprocessing.scale(x)
+u_scaled = preprocessing.scale(u)
+
+clf= svm.SVC(C = 4)
+clf.fit(x_scaled,y)
+
+result_array = np.array([])
+index_array = np.array([])
+
+for i in range(0, 28000): 
+    index_array = np.append(index_array, i+1) 
+    result_array = np.append(result_array, clf.predict([u_scaled[i]]))
+    
+index_array = index_array.astype(np.int32)
+result_array = result_array.astype(np.int32)
+
+ImageId = ['ImageId']
+Label = ['Label']
+
+s1 = pd.DataFrame(data=index_array, columns= ImageId)
+s2 = pd.DataFrame(data=result_array, columns= Label)
+
+s1['Label']=s2['Label']
+
+s1.to_csv('submit1.csv', index = False)
+
+submit1 = pd.read_csv("../Jason/submit1.csv")
+
+print(submit1)
+
