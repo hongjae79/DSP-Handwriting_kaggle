@@ -4,4 +4,6 @@
 
 code and better version both uses SVM. 
 
-handwritngTheano uses neural network by Theano
+handwritng_theano uses neural network by Theano. 
+
+handwriting_tf uses neural network by tensorflow.
